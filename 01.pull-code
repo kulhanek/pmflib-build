@@ -18,16 +18,7 @@ cd $OLDPWD
 
 # ------------------------------------------------------------------------------
 
-# download thirdparty code
-dowload_code thirdparty/blas/netlib BLAS
-dowload_code thirdparty/lapack/3.1.1 LAPACK
-dowload_code thirdparty/csparse/2.2.1 CSparse
-dowload_code thirdparty/ranlux/1.0 RanLux
-
-# download source code
-dowload_code projects/hipoly/1.0 HiPoLy
-dowload_code projects/scimafic/1.0 SciMaFic
-dowload_code projects/prmfile/1.0 PrmFile
-dowload_code projects/netlib/1.0 NetLib
-dowload_code projects/pmflib/4.0 PMFLib
+cat repositories | grep -v '^#' | while read A B; do
+   dowload_code $A $B || exit 1
+done
 
