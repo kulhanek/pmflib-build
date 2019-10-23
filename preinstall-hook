@@ -12,6 +12,6 @@ fi
 _PWD=$PWD
 cd src/projects/pmflib/5.0 || exit 1
 ./UpdateGitVersion activate || exit 1
-VERS="16.5.`git rev-list --count HEAD`.`git rev-parse --short HEAD`"
+VERS="5.`git rev-list --count HEAD`.`git rev-parse --short HEAD`"
 cd $_PWD
 
