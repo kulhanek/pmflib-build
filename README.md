@@ -19,7 +19,6 @@ $ cd pmflib-build
 $ ./build-utils/00.init-links.sh
 $ ./01.pull-code.sh
 $ ./10.build-final.sh  # standard build
-$ ./11.build-node.sh   # package with OpenMP support
 ```
 
 ### Production Build into Custom Directory
