@@ -31,6 +31,7 @@ SET(PMFLIB_CP2K_DRV     OFF  CACHE BOOL "Should the driver for cp2k be built?" F
 SET(PMFLIB_XDYNBP_DRV   OFF  CACHE BOOL "Should the driver for xdynbp be built?")
 SET(PMFLIB_LIBATOMS_DRV OFF  CACHE BOOL "Should the driver for libatoms be built?" FORCE)
 SET(PMFLIB_CATS_DRV     OFF  CACHE BOOL "Should the driver for cats be built?" FORCE)
+SET(PMFLIB_OPENMP       OFF CACHE BOOL "Should OpenMP be enabled for some PMFLib utilities?")
 
 # ==============================================================================
 # libraries --------------------------------------------------------------------
@@ -75,6 +76,19 @@ INCLUDE(IntelCDK)
 # setup compilers
 INCLUDE(SetupCompilers)
 
+# if parallel environment is available
+IF( NOT MPI_ENABLED )  # do not mix MPI and OpenMP
+    IF( PMFLIB_OPENMP OR (MKL_MODE STREQUAL "parallel") OR (MKL_MODE STREQUAL "parallel/ilp64"))
+        # setup OpenMP for cpmf if available
+        FIND_PACKAGE(OpenMP)
+        MESSAGE("-- OpenMP MODE: enabled")
+    ELSE()
+        MESSAGE("-- OpenMP MODE: disabled")
+    ENDIF()
+ELSE()
+    MESSAGE("-- OpenMP MODE: disabled")
+ENDIF()
+
 SET(CMAKE_BUILD_TYPE Release)
 #SET(CMAKE_BUILD_TYPE Debug)
 
@@ -117,5 +131,9 @@ IF(NOT MKL_FOUND)
     ADD_DEPENDENCIES(fpmf_shared fblasd_shared flapackd_shared)
 ENDIF(NOT MKL_FOUND)
 
-ADD_DEPENDENCIES(abf-optgprhyprms flbfgs_shared)
+IF(OpenMP_FOUND)
+    ADD_DEPENDENCIES(_abf-optgprhyprms flbfgs_shared cpmf_shared)    
+ELSE()
+    ADD_DEPENDENCIES(abf-optgprhyprms flbfgs_shared cpmf_shared)
+ENDIF()
 
