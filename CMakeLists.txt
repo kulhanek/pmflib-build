@@ -2,7 +2,7 @@
 # PMEMD-PMF Composite CMake File
 # ==============================================================================
 
-CMAKE_MINIMUM_REQUIRED(VERSION 2.8 FATAL_ERROR)
+CMAKE_MINIMUM_REQUIRED(VERSION 3.10 FATAL_ERROR)
 #SET(CMAKE_VERBOSE_MAKEFILE ON)
 
 # ==============================================================================
@@ -110,7 +110,7 @@ ADD_SUBDIRECTORY(src/projects/hipoly/1.0)
 ADD_SUBDIRECTORY(src/projects/scimafic/1.0)
 ADD_SUBDIRECTORY(src/projects/prmfile/1.0)
 ADD_SUBDIRECTORY(src/projects/netlib/1.0)
-ADD_SUBDIRECTORY(src/projects/pmflib/5.0)
+ADD_SUBDIRECTORY(src/projects/pmflib/6.0)
 
 # ==============================================================================
 # inter-project dependencies  -------------------------------------------------
@@ -132,8 +132,8 @@ IF(NOT MKL_FOUND)
 ENDIF(NOT MKL_FOUND)
 
 IF(OpenMP_FOUND)
-    ADD_DEPENDENCIES(_abf-optgprhyprms flbfgs_shared cpmf_shared)    
+    ADD_DEPENDENCIES(_gpr-opthyprms flbfgs_shared cpmf_shared)
 ELSE()
-    ADD_DEPENDENCIES(abf-optgprhyprms flbfgs_shared cpmf_shared)
+    ADD_DEPENDENCIES(gpr-opthyprms flbfgs_shared cpmf_shared)
 ENDIF()
 
