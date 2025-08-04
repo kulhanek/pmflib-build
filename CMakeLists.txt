@@ -22,16 +22,14 @@ SET(DEVELOPMENT_ROOT "${CMAKE_BINARY_DIR}/src")
 
 # extra options ----------------------------------
 SET(LIBS_COMPLEX        OFF  CACHE BOOL "Support for complex numbers?" FORCE)
-SET(PMFLIB_HAVE_XBPLIB  OFF  CACHE BOOL "Is XBPLib available?" FORCE)
 SET(TRY_QT_LIB          OFF  CACHE BOOL "QT is not neccessary" FORCE)
-SET(PMFLIB_SANDER_DRV   OFF  CACHE BOOL "Should the driver for sander be built?" FORCE)
-SET(PMFLIB_PMEMD_DRV    OFF   CACHE BOOL "Should the driver for pmemd be built?" FORCE)
-SET(PMFLIB_CPMD_DRV     OFF  CACHE BOOL "Should the driver for cpmd be built?" FORCE)
-SET(PMFLIB_CP2K_DRV     OFF  CACHE BOOL "Should the driver for cp2k be built?" FORCE)
-SET(PMFLIB_XDYNBP_DRV   OFF  CACHE BOOL "Should the driver for xdynbp be built?")
-SET(PMFLIB_LIBATOMS_DRV OFF  CACHE BOOL "Should the driver for libatoms be built?" FORCE)
-SET(PMFLIB_CATS_DRV     OFF  CACHE BOOL "Should the driver for cats be built?" FORCE)
-SET(PMFLIB_OPENMP       OFF CACHE BOOL "Should OpenMP be enabled for some PMFLib utilities?")
+
+SET(PMFLIB_SANDER_DRV           OFF  CACHE BOOL "Should the driver for sander be built?" FORCE)
+SET(PMFLIB_SANDER_DYNAMIC_DRV   ON  CACHE BOOL "Should the driver for pmemd be built?" FORCE)
+SET(PMFLIB_PMEMD_DYNAMIC_DRV    ON  CACHE BOOL "Should the driver for pmemd be built?" FORCE)
+SET(PMFLIB_CATS_DRV             OFF  CACHE BOOL "Should the driver for cats be built?" FORCE)
+
+SET(PMFLIB_OPENMP       OFF  CACHE BOOL "Should OpenMP be enabled for some PMFLib utilities?")
 
 # ==============================================================================
 # libraries --------------------------------------------------------------------
@@ -101,7 +99,6 @@ IF(NOT MKL_FOUND)
     ADD_SUBDIRECTORY(src/thirdparty/blas/netlib)
     ADD_SUBDIRECTORY(src/thirdparty/lapack/3.1.1)
 ENDIF(NOT MKL_FOUND)
-ADD_SUBDIRECTORY(src/thirdparty/ranlux/1.0)
 ADD_SUBDIRECTORY(src/thirdparty/csparse/2.2.1)
 ADD_SUBDIRECTORY(src/thirdparty/lbfgs/1.0)
 
@@ -120,7 +117,7 @@ ADD_DEPENDENCIES(cscimafic_shared hipoly_shared)
 ADD_DEPENDENCIES(cscimafic_shared hipoly_shared)
 ADD_DEPENDENCIES(cprmfile_shared hipoly_shared)
 ADD_DEPENDENCIES(netlib_shared hipoly_shared cprmfile_shared)
-ADD_DEPENDENCIES(fpmf_shared fprmfile_shared fscimafic_shared franlux_shared)
+ADD_DEPENDENCIES(fpmf_shared fprmfile_shared fscimafic_shared)
 ADD_DEPENDENCIES(cpmf_shared hipoly_shared cscimafic_shared netlib_shared)
 
 # local blas and lapack
@@ -129,11 +126,15 @@ IF(NOT MKL_FOUND)
     ADD_DEPENDENCIES(fscimafic_shared fblasd_shared flapackd_shared)    
     ADD_DEPENDENCIES(flapackd_shared fblasd_shared)
     ADD_DEPENDENCIES(fpmf_shared fblasd_shared flapackd_shared)
+    ADD_DEPENDENCIES(flbfgs90_shared fblasd_shared flapackd_shared)
+    ADD_DEPENDENCIES(flbfgs_shared fblasd_shared flapackd_shared)
 ENDIF(NOT MKL_FOUND)
 
 IF(OpenMP_FOUND)
     ADD_DEPENDENCIES(_gpr-opthyprms flbfgs_shared cpmf_shared)
+    ADD_DEPENDENCIES(_gpr-opthyprms-multi flbfgs_shared cpmf_shared)
 ELSE()
     ADD_DEPENDENCIES(gpr-opthyprms flbfgs_shared cpmf_shared)
+    ADD_DEPENDENCIES(gpr-opthyprms-multi flbfgs_shared cpmf_shared)
 ENDIF()
 
